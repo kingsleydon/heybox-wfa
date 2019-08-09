@@ -1,12 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, {FC, useEffect} from 'react'
+import ReactDOM from 'react-dom'
+import {ConnectedRouter} from 'connected-react-router'
+import {Provider} from 'react-redux'
+import Layout from 'components/Layout'
+import store, {history} from 'store'
+import {requestToken} from 'store/env'
+import 'styles/global.css'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const App: FC = () => {
+  useEffect(() => {
+    store.dispatch(requestToken())
+  }, [])
+  return (
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Layout>{}</Layout>
+      </ConnectedRouter>
+    </Provider>
+  )
+}
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+export default App
+
+ReactDOM.render(<App />, document.getElementById('root'))
