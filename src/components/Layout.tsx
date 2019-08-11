@@ -17,15 +17,21 @@ const AppBar: FC = props => (
 const Layout: FC = ({children}) => {
   return (
     <Grommet theme={THEME} full>
-      {/* <Box fill> */}
-      <AppBar>
-        <Toast color="brand" />
-        <Heading level="3" margin={{left: '10px', vertical: '0'}} size="small">
-          WFA Web
-        </Heading>
-      </AppBar>
-      <Box pad="medium">{children}</Box>
-      {/* </Box> */}
+      <Box fill>
+        <AppBar>
+          <Toast color="brand" />
+          <Heading
+            level="3"
+            margin={{left: '10px', vertical: '0'}}
+            size="small"
+          >
+            WFA Web
+          </Heading>
+        </AppBar>
+        <Box pad="medium" fill className="ContentContainer">
+          {children}
+        </Box>
+      </Box>
     </Grommet>
   )
 }

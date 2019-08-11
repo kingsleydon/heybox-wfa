@@ -1,21 +1,40 @@
 import {AxiosRequestConfig, AxiosResponse} from 'axios'
 import {Action} from 'redux'
-const SUFFIX: Suffix[] = ['REQUEST', 'SUCCESS', 'FAIL']
+
+export const SUFFIX: Suffix[] = ['REQUEST', 'SUCCESS', 'FAIL']
 
 type Suffix = 'REQUEST' | 'SUCCESS' | 'FAIL'
 
-export interface AxiosRequestAction extends Action<string> {
+export interface DataState<T> {
+  loading: boolean
+  fulfilled: boolean
+  data?: T
+}
+
+export interface AxiosRequestAction<T = any> extends Action<string> {
   payload: {
     request: AxiosRequestConfig
+    options?: {
+      onSuccess({
+        getState,
+        dispatch,
+        response,
+      }: {
+        getState(): any
+        dispatch(action: AxiosResponseAction): void
+        response: AxiosResponse<T>
+      }): void
+    }
   }
   meta?: object
 }
 
-export interface AxiosResponseAction extends Action<string> {
-  payload: AxiosResponse
-  meta: {
+export interface AxiosResponseAction<T = any> extends Action<string> {
+  payload: AxiosResponse<T> | {data: any}
+  meta?: {
     previousAction: AxiosRequestAction
   }
+  error?: object
 }
 
 export interface AxiosActionTypes {

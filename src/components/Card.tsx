@@ -1,39 +1,72 @@
-import React, {FC, ReactNode} from 'react'
-import {Box, Heading, BoxProps} from 'grommet'
+import React, {FC, ReactNode, useState, useEffect} from 'react'
+import {Box, Heading, BoxProps, Stack} from 'grommet'
+import {Update} from 'grommet-icons'
+import {ANIMATION_DURATION} from 'constants/theme'
 
-interface CardProps {
+export interface CardProps extends BoxProps {
   title?: ReactNode
   extra?: ReactNode
   footer?: ReactNode
+  loading?: boolean
 }
 
-const pad: BoxProps['pad'] = 'medium'
-
 const Card: FC<CardProps> = props => {
-  const {title, extra, footer, children, ...restProps} = props
+  const {title, extra, footer, loading, children, ...restProps} = props
+  const [showSpinning, setShowSpinning] = useState(loading)
+
+  useEffect(() => {
+    if (loading && !showSpinning) {
+      setShowSpinning(true)
+      return
+    }
+
+    if (!loading && showSpinning) {
+      const hideSpinningTimeout = setTimeout(
+        () => setShowSpinning(false),
+        ANIMATION_DURATION
+      )
+      return () => {
+        clearTimeout(hideSpinningTimeout)
+      }
+    }
+  }, [loading, showSpinning])
+
   return (
-    <Box
-      fill="horizontal"
-      {...restProps}
-      background={{color: '#ffffff'}}
-      round="small"
-      elevation="xsmall"
-    >
-      {(title || extra) && (
-        <Box flex align="center" direction="row" pad={pad}>
-          <Box flex="grow">
-            {title && (
-              <Heading level="3" margin="none">
-                {title}
-              </Heading>
-            )}
+    <Stack>
+      <Box
+        fill="horizontal"
+        border={{color: 'brand', size: 'medium', side: 'bottom'}}
+        pad={{vertical: 'medium'}}
+        {...restProps}
+      >
+        {(title || extra) && (
+          <Box flex align="center" direction="row">
+            <Box flex="grow">
+              {title && (
+                <Heading level="2" margin={{vertical: 'small'}}>
+                  {title}
+                </Heading>
+              )}
+            </Box>
+            {extra && <Box>{extra}</Box>}
           </Box>
-          {extra && <Box>{extra}</Box>}
+        )}
+        {children && <Box pad="medium">{children}</Box>}
+        {footer}
+      </Box>
+      {showSpinning && (
+        <Box
+          fill
+          flex
+          align="center"
+          justify="center"
+          background={{color: '#ffffff', opacity: 'strong'}}
+          animation={loading ? 'fadeIn' : 'fadeOut'}
+        >
+          <Update className="Spinning" />
         </Box>
       )}
-      {children && <Box pad={pad}>{children}</Box>}
-      {footer && <Box pad={pad}>{footer}</Box>}
-    </Box>
+    </Stack>
   )
 }
 

@@ -1,4 +1,5 @@
-import React, {Route, Switch} from 'react-router-dom'
+import React from 'react'
+import {Route, Switch} from 'react-router-dom'
 import Index from 'pages/Index'
 
 const routes = (

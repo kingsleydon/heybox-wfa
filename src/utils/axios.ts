@@ -1,19 +1,25 @@
+import Cookies from 'js-cookie'
 import {useState, useEffect, useRef, EffectCallback} from 'react'
-import axios, {AxiosRequestConfig} from 'axios'
+import axios, {AxiosRequestConfig, AxiosResponse, AxiosError} from 'axios'
 
 const instance = axios.create({
   baseURL: 'https://api.richasy.cn',
 })
 instance.interceptors.response.use(
-  res => {
+  (res: AxiosResponse) => {
     return Promise.resolve(res)
   },
-  err => {
+  (err: AxiosError) => {
     if (!axios.isCancel(err)) {
+      Cookies.remove('token')
       return Promise.reject(err)
     }
   }
 )
+const token = Cookies.get('token')
+if (token) {
+  instance.defaults.headers.common['Authorization'] = token
+}
 
 type UseAxios = [
   {data: object | null; loading: boolean; error: boolean; fulfilled: boolean},

@@ -3,3 +3,21 @@
 body {
   font-family: sans-serif;
 }
+
+.Spinning {
+  animation: spinning 1s linear infinite;
+}
+
+.ContentContainer {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@keyframes spinning {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
