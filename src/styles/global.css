@@ -1,7 +1,7 @@
 @import 'sanitize.css';
 
 body {
-  font-family: sans-serif;
+  background-color: #fff;
 }
 
 .Spinning {
@@ -9,8 +9,8 @@ body {
 }
 
 .ContentContainer {
-  max-width: 600px!important;
-  margin: 0 auto!important;
+  max-width: 600px !important;
+  margin: 0 auto !important;
 }
 
 @keyframes spinning {
